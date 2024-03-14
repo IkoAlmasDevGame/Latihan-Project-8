@@ -12,7 +12,7 @@
     <body onload="startTime()">
         <div class="app">
             <div class="layout">
-                <nav class="navbar navbar-expand-lg fixed-top bg-body-secondary">
+                <nav class="navbar navbar-expand-lg bg-body-secondary">
                     <header class="container-fluid">
                         <a href="index.php" class="navbar-brand">Bebas 3</a>
                         <button type="button" class="navbar-toggler" data-bs-target="#navbarToggle"
