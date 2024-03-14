@@ -44,14 +44,13 @@
         function startTime() {
             var day = ["Ahad", "Itsnain", "tsulatsa", "Arbia", "Khamiis ", "Jumu’ah", "Sabtu"];
             var today = new Date();
-            var tahun = today.getFullYear();
             var h = today.getHours();
             var m = today.getMinutes();
             var s = today.getSeconds();
             m = checkTime(m);
             s = checkTime(s);
             document.getElementById('time').innerHTML =
-                day[today.getDay()] + ", " + h + ":" + m + ":" + s + ", " + tahun;
+                day[today.getDay()] + ", " + h + ":" + m + ":" + s + ", " + today.getFullYear();
             var t = setTimeout(startTime, 500);
         }
 

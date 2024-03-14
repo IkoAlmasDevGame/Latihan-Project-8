@@ -1,6 +1,6 @@
 <IfModule mod_rewrite.c>
-  RewriteEngine On
-  Options -Indexes
+  RewriteEngine On 
+  Options -Indexes 
   RewriteBase / 
   RewriteCond %{REQUEST_FILENAME} !-f 
   RewriteCond %{REQUEST_FILENAME} !-d 

@@ -9,7 +9,7 @@ if($_SESSION["user_level"] == ""){
 if($_SESSION["user_level"] == "Pelanggan"){
 ?>
 <div class="col-md-12 col-lg-12">
-    <nav class="navbar navbar-expand-lg bg-body-secondary flex-wrap">
+    <nav class="navbar navbar-expand-lg bg-body-secondary">
         <header class="container-fluid">
             <a href="../dashboard/index.php?nama=<?=$_SESSION['nama_pengguna']?>" class="navbar-brand">Dashboad Bebas
                 Pelanggan</a>
