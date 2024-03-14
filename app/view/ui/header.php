@@ -7,11 +7,19 @@
         <title>Dashboard Bebas 3</title>
         <?php 
             session_start();
+
+            use controller\Controller;
+            use model\View;
+
             require_once("../../database/koneksi.php");
             require_once("../../config/auth.php");
             require_once("../../config/config.php");
             require_once("../../controller/view.php");
             require_once("../../model/model.php");
+
+            $model = new view($configs);
+            $lihat = new controller($configs);
+
 
             if(isset($_GET['aksi'])){
                 $aksi = $_GET['aksi'];
