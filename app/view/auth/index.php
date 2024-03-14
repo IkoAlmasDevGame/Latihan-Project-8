@@ -7,6 +7,67 @@
         <title>Login Dashboard Bebas 3</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+        <?php 
+        require_once("../../database/koneksi.php");
+        if(isset($_GET["act"])){
+            session_start();
+            if($_GET["act"] == "signin"){
+                if(isset($_POST["submit"])){
+                $userMail = htmlspecialchars($_POST['userMail']);
+                $password = htmlspecialchars($_POST['password']);
+                password_verify($password, PASSWORD_DEFAULT);
+                                
+                if($userMail == "" || $password == ""){
+                    header("location:index.php");
+                    exit(0);
+                }
+
+                $table = "tb_pelanggan";
+                $sql = "SELECT $table WHERE email = '$userMail' and password = '$password' || username = '$userMail' and password = '$password'";
+                $db = $configs->prepare($sql);
+                $db->execute();
+                $cek = $db->rowCount();
+
+                if($cek > 0){
+                    $response = array($userMail,$password);
+                    $response[$table] = array($userMail,$password);
+                    if($row = $db->fetch()){
+                        if($row['user_level'] == "Pelanggan"){
+                            $_SESSION['id'] = $row['id_pengguna'];
+                            $_SESSION['nama_pengguna'] = $row['nama'];
+                            $_SESSION['email_pengguna'] = $row['email'];
+                            $_SESSION['username'] = $row['username'];
+                            $_SESSION['user_level'] = "Pelanggan";
+                            header("location:../dashboard/index.php?nama=".$_SESSION['nama_pengguna']);
+                        }
+                        $_SESSION['status'] = true;
+                        array_push($response[$table], $row);
+                        /* Created_At Timestamp */ 
+                        exit(0);
+                    }
+                }else{
+                    $_SESSION['status'] = false;
+                    header("location:index.php");
+                    exit(0);
+                }
+            }
+            }else if($_GET["act"] == "register"){
+                if(isset($_POST["submits"])){
+                $email = htmlspecialchars($_POST["email"]);
+                $username = htmlspecialchars($_POST["username"]);
+                $password = htmlspecialchars($_POST["password"]);
+                $nama = htmlspecialchars($_POST["nama"]);
+                $jabatan = htmlspecialchars($_POST["user_level"]);
+
+                $table = "tb_pelanggan";
+                $sql = "INSERT INTO $table (email,username,password,nama,user_level) VALUES (?,?,?,?,?)";
+                $row = $configs->prepare($sql);
+                $row->execute(array($email,$username,$password,$nama,$jabatan));
+                header("location:index.php");
+                }
+            }
+        }
+        ?>
     </head>
 
     <body onload="startTime()">
@@ -49,7 +110,7 @@
                                             </h3>
                                         </div>
                                         <div class="card-body">
-                                            <form action="" method="post">
+                                            <form action="index.php?act=signin" method="post">
                                                 <div class="row align-items-center form-group mb-2 mb-lg-0">
                                                     <label for="userMail" class="input-group-addon">Email /
                                                         Username</label>
@@ -94,7 +155,7 @@
                                             <h3 class="fs-5 text-center fw-lighter">Register Pelanggan</h3>
                                         </div>
                                         <div class="card-body">
-                                            <form action="" method="post">
+                                            <form action="index.php?act=register" method="post">
                                                 <div class="row align-items-center form-group mb-2 mb-lg-0">
                                                     <label for="eMail" class="input-group-addon">Email</label>
                                                     <div class="input-group-text form-control">
