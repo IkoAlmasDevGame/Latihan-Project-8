@@ -8,65 +8,65 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
         <?php 
-        require_once("../../database/koneksi.php");
-        if(isset($_GET["act"])){
-            session_start();
-            if($_GET["act"] == "signin"){
-                if(isset($_POST["submit"])){
-                $userMail = htmlspecialchars($_POST['userMail']);
-                $password = htmlspecialchars($_POST['password']);
-                password_verify($password, PASSWORD_DEFAULT);
-                                
-                if($userMail == "" || $password == ""){
-                    header("location:index.php");
-                    exit(0);
-                }
+            require_once("../../database/koneksi.php");
+            if(isset($_GET["act"])){
+                if($_GET["act"] == "signin"){
+                    session_start();
+                    if(isset($_POST["submit"])){
+                        $userEmail = htmlspecialchars($_POST["userMail"]);
+                        $password = htmlspecialchars($_POST["password"]);
+                        password_verify($password, PASSWORD_DEFAULT);
 
-                $table = "tb_pelanggan";
-                $sql = "SELECT $table WHERE email = '$userMail' and password = '$password' || username = '$userMail' and password = '$password'";
-                $db = $configs->prepare($sql);
-                $db->execute();
-                $cek = $db->rowCount();
-
-                if($cek > 0){
-                    $response = array($userMail,$password);
-                    $response[$table] = array($userMail,$password);
-                    if($row = $db->fetch()){
-                        if($row['user_level'] == "Pelanggan"){
-                            $_SESSION['id'] = $row['id_pengguna'];
-                            $_SESSION['nama_pengguna'] = $row['nama'];
-                            $_SESSION['email_pengguna'] = $row['email'];
-                            $_SESSION['username'] = $row['username'];
-                            $_SESSION['user_level'] = "Pelanggan";
-                            header("location:../dashboard/index.php?nama=".$_SESSION['nama_pengguna']);
+                        if($userEmail == "" || $password == ""){
+                            header("location:index.php");
+                            exit(0);
                         }
-                        $_SESSION['status'] = true;
-                        array_push($response[$table], $row);
-                        /* Created_At Timestamp */ 
-                        exit(0);
-                    }
-                }else{
-                    $_SESSION['status'] = false;
-                    header("location:index.php");
-                    exit(0);
-                }
-            }
-            }else if($_GET["act"] == "register"){
-                if(isset($_POST["submits"])){
-                $email = htmlspecialchars($_POST["email"]);
-                $username = htmlspecialchars($_POST["username"]);
-                $password = htmlspecialchars($_POST["password"]);
-                $nama = htmlspecialchars($_POST["nama"]);
-                $jabatan = htmlspecialchars($_POST["user_level"]);
 
-                $table = "tb_pelanggan";
-                $sql = "INSERT INTO $table (email,username,password,nama,user_level) VALUES (?,?,?,?,?)";
-                $row = $configs->prepare($sql);
-                $row->execute(array($email,$username,$password,$nama,$jabatan));
-                header("location:index.php");
+                        $table = "tb_pelanggan";
+                        $sql = "SELECT * FROM $table WHERE email = '$userEmail' and password = '$password' || username='$userEmail' and password='$password'";
+                        $db = $configs->prepare($sql);
+                        $db->execute();
+                        $cek = $db->rowCount();
+
+                        if($cek > 0){
+                            $response = array($userEmail, $password);
+                            $response[$table] = array($userEmail, $password);
+                            if($row = $db->fetch()){
+                                if($row["user_level"] == "Pelanggan"){
+                                    $_SESSION["id"] = $row["id_pelanggan"];
+                                    $_SESSION["email_pengguna"] = $row["email"];
+                                    $_SESSION["username"] = $row["username"];
+                                    $_SESSION["nama_pengguna"] = $row["nama"];
+                                    $_SESSION["user_level"] = "Pelanggan";
+                                    header("location:../dashboard/index.php?nama=".$_SESSION["nama_pengguna"]);
+                                }
+                                $_SESSION["status"] = true;
+                                array_push($response["tb_pelanggan"], $row);
+                                exit(0);
+                            }else{
+                                $_SESSION["status"] = false;
+                                header("location:index.php");
+                                exit(0);
+                            }
+                        }
+                    }    
+                }
+                if($_GET["act"] == "register"){
+                    if(isset($_POST["submits"])){
+                        $email = htmlspecialchars($_POST["email"]);
+                        $username = htmlspecialchars($_POST["username"]);
+                        $password = htmlspecialchars($_POST["password"]);
+                        $nama = htmlspecialchars($_POST["nama"]);
+                        $user_level = "Pelanggan";
+
+                        $table = "tb_pelanggan";
+                        $sql = "INSERT INTO $table (email,username,password,nama,user_level) VALUES (?,?,?,?,?)";
+                        $a = array($email,$username,$password,$nama,$user_level);
+                        $row = $configs->prepare($sql)->execute($a);
+                        header("location:index.php");
+                    }
                 }
             }
-        }
         ?>
     </head>
 

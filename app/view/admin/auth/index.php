@@ -33,7 +33,7 @@
                     $response[$table] = array($userMail,$password);
                     if($row = $db->fetch()){
                         if($row['user_level'] == "Admin"){
-                            $_SESSION['id'] = $row['id_pengguna'];
+                            $_SESSION['id'] = $row['id_user'];
                             $_SESSION['nama_pengguna'] = $row['nama'];
                             $_SESSION['email_pengguna'] = $row['email'];
                             $_SESSION['username'] = $row['username'];
